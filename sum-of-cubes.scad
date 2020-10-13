@@ -1,4 +1,4 @@
-module txt(p, s, size=0.01) {
+module txt(p, s, size=0.03) {
     translate(p) rotate([90, 0, 0]) scale(size)
         linear_extrude(1) text(str(s));
 }
@@ -55,6 +55,6 @@ module octahedron(n, outline=false) {
 }
 
 n = 3;
-octahedron(n);
-rotate([90, 0, 0]) octahedron(n, outline=false);
-rotate([0, 90, 0]) octahedron(n, outline=false);
+octahedron(n, outline=false);
+rotate([90, 0, 0]) octahedron(n);
+rotate([0, 90, 0]) octahedron(n);
