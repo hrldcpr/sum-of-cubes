@@ -5,7 +5,7 @@
 
 module txt(p, s, size=0.03) {
     translate(p) rotate([90, 0, 0]) scale(size)
-        linear_extrude(1) text(str(s));
+        translate([-5, 0, 0]) linear_extrude(1) text(str(s));
 }
 
 module line(start, end, thickness=0.01) {
@@ -22,13 +22,13 @@ function interp(a, b, x) = a*(1-x) + b*x;
 // tetrahedra
 //
 
-module tlayer(a, b, c, n) {
-    // triangle
-    for(u = [0:n-1]) {
-        ab = interp(a, b, u/(n-1));
-        ac = interp(a, c, u/(n-1));
+module tlayer(b, c, d, n) {
+    txt(b, n);
+    for(u = [1:n-1]) {
+        bc = interp(b, c, u/(n-1));
+        bd = interp(b, d, u/(n-1));
         for(v = [0:u]) {
-            txt(interp(ab, ac, v/(n-1)), n);
+            txt(interp(bc, bd, v/u), n);
         }
     }
 }
@@ -51,16 +51,13 @@ module tetrahedron(n, outline=false) {
         // top layer
         txt(a, 1);
 
-//        for(end = [top, -top]) {
-//            
-//            // other layers
-//            if (n>2) for(i = [2:n-1]) {
-//                northi = interp(end, north, (i-1)/(n-1));
-//                easti = interp(end, east, (i-1)/(n-1));
-//                westi = interp(end, -east, (i-1)/(n-1));
-//                tlayer(northi, easti, westi, i);
-//            }
-//        }
+        // other layers
+        if (n > 1) for(i = [2:n]) {
+            ab = interp(a, b, (i-1)/(n-1));
+            ac = interp(a, c, (i-1)/(n-1));
+            ad = interp(a, d, (i-1)/(n-1));
+            tlayer(ab, ac, ad, i);
+        }
     }
 }
 
@@ -131,4 +128,4 @@ module multioctahedron(n, outline=false) {
 //
 
 //multioctahedron(3);
-multitetrahedron(3, outline=true);
+multitetrahedron(3, outline=false);
