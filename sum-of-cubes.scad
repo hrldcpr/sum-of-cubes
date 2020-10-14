@@ -41,7 +41,6 @@ module tetrahedron(n, outline=false) {
     vs = [a, b, c, d];
     rotate([45, -asin(1/sqrt(3)), 0])
     scale(20) {
-        // outline
         if(outline) for(i = [0:len(vs)-2]) {
             for(j = [i+1:len(vs)-1]) {
                 line(vs[i], vs[j]);
@@ -87,7 +86,6 @@ module octahedron(n, outline=false) {
     east = [1, 0, 0];
     middle = [east, north, -east, -north];
     scale(20) {
-        // outline
         if(outline) for(i = [0:len(middle)-1]) {
             line(top, middle[i]);
             line(middle[i], middle[(i+1) % len(middle)]);
