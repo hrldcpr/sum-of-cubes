@@ -3,9 +3,9 @@
 // util
 //
 
-module txt(p, s, size=0.03) {
-    translate(p) rotate([90, 0, 0]) scale(size)
-        translate([-5, 0, 0]) linear_extrude(1) text(str(s));
+module txt(s, size=0.03) {
+    scale(size) translate([-5, 0, 0]) rotate([90, 0, 0])
+    linear_extrude(1) text(str(s));
 }
 
 module line(start, end, thickness=0.01) {
@@ -28,7 +28,10 @@ module tlayer(b, c, d, n) {
         bc = interp(b, c, u, n-1);
         bd = interp(b, d, u, n-1);
         for(v = [0:u]) {
-            txt(interp(bc, bd, v, u), n);
+            translate(interp(bc, bd, v, u))
+            // TODO whence these angles?
+            rotate([-45+10, asin(1/sqrt(3))+10, 0])
+            txt(n);
         }
     }
 }
@@ -58,7 +61,7 @@ module tetrahedron(n, outline=false) {
 
 module multitetrahedron(n, outline=false) {
     tetrahedron(n, outline=outline);
-    // TODO wherefore these rotations?
+    // TODO whence these angles?
     rotate([112, 28, 101]) tetrahedron(n, outline=outline);
     rotate([112, 28, 221]) tetrahedron(n, outline=outline);
     rotate([112, 28, 341]) tetrahedron(n, outline=outline);
@@ -75,7 +78,7 @@ module olayer(north, east, west, n) {
     dv = (west - north) / (n - 1);
     for(u = [0:n-1]) {
         for(v = [0:n-1]) {
-            txt(north + u*du + v*dv, n);
+            translate(north + u*du + v*dv) txt(n);
         }
     }
 }
@@ -97,7 +100,7 @@ module octahedron(n, outline=false) {
         
         for(end = [top, -top]) {
             // end layer
-            txt(end, 1);
+            translate(end) txt(1);
             
             // other layers
             if (n > 2) for(i = [2:n-1]) {
@@ -122,4 +125,4 @@ module multioctahedron(n, outline=false) {
 //
 
 //multioctahedron(3);
-multitetrahedron(3, outline=false);
+multitetrahedron(5);
